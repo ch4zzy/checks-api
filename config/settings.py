@@ -15,7 +15,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG")
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["restaurant", "localhost"]
 
 
 # Application definition
@@ -63,9 +63,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        # "HOST": env("DB_HOST"),
+        "PORT": env.int("DB_PORT"),
     }
 }
 
@@ -103,4 +107,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-STATIC_URL = '/static/'
+STATIC_URL = os.path.join(BASE_DIR, "/static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost']

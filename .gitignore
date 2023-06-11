@@ -29,3 +29,4 @@ venv/
 *.ntvs*
 *.njsproj
 *.sln
+static/
