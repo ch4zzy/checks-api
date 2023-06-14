@@ -14,5 +14,5 @@ class CheckAdmin(admin.ModelAdmin):
 
 @admin.register(Printer)
 class PrinterAdmin(admin.ModelAdmin):
-    list_display = ("name", "api_key", "check_type", "point_id")
+    list_display = ("id", "name", "api_key", "check_type", "point_id")
     list_filter = ("check_type",)
