@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "apps.reciept",
 ]
 
 MIDDLEWARE = [
@@ -111,5 +113,12 @@ USE_TZ = True
 
 STATIC_URL = os.path.join(BASE_DIR, "/static/")
 STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
+
+
+# Media files (pdf)
+
+MEDIA_URL = os.path.join(BASE_DIR, "/media/")
+MEDIA_ROOT = os.path.join(BASE_DIR, "/media/")
+
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost"]
