@@ -1,16 +1,6 @@
-version: '3.9.16'
+version: '3.10'
 
 services:
-  web:
-    volumes:
-      - .:/code
-      - static:/static
-    build:
-      context: .
-    ports:
-      - 8000:8000
-    depends_on:
-      - db
   db:
     image: postgres:14.7
     environment:
@@ -19,6 +9,19 @@ services:
       - config/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+
+  web:
+    build:
+      context: .
+    restart: always
+    volumes:
+      - .:/code
+      - static:/static
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
   nginx:
     build: ./nginx
     volumes:
