@@ -1,6 +1,32 @@
 version: '3.10'
 
 services:
+  django:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+  
+  celery:
+    build: .
+    command: celery -A config worker -l INFO
+    volumes:
+      - .:/code
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - django
+      - redis
+  
   db:
     image: postgres:14.7
     environment:
@@ -10,27 +36,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
-  web:
-    build:
-      context: .
-    restart: always
-    volumes:
-      - .:/code
-      - static:/static
-    ports:
-      - 8000:8000
-    depends_on:
-      - db
-
-  nginx:
-    build: ./nginx
-    volumes:
-      - static:/static
-    ports:
-      - "80:80"
-    depends_on:
-      - web
+  redis:
+    image: "redis:alpine"
 
 volumes:
   postgres_data:
-  static:
