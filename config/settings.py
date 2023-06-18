@@ -119,7 +119,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
 # Media files (pdf)
 
 MEDIA_URL = os.path.join(BASE_DIR, "/media/")
-MEDIA_ROOT = os.path.join(BASE_DIR, "/media/")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
