@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.reciept.models import Check, Printer
-from apps.reciept.validators import validate_order, validate_printers
+
 
 class CheckSerializer(serializers.ModelSerializer):
     """
