@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from apps.reciept.constants import StatusType
 from apps.reciept.models import Check, Printer
 from apps.reciept.serializers import CheckListSerializer, CheckSerializer
+from apps.reciept.tasks import async_create_pdf
 from apps.reciept.validators import validate_order, validate_printers
 
 
@@ -50,6 +51,7 @@ class CheckViewSet(viewsets.GenericViewSet):
 
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            check = serializer.save()
             created_checks.append(serializer.data)
+            async_create_pdf.delay(check.id, printer.check_type, data["order"])
         return Response(created_checks, status=status.HTTP_201_CREATED)
