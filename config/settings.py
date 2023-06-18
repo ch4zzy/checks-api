@@ -122,9 +122,13 @@ MEDIA_URL = os.path.join(BASE_DIR, "/media/")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
+# Celery config
+
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 
+
+# WKHTMLTOPDF config
 
 WKHTMLTOPDF_CMD = "/usr/bin/wkhtmltopdf"
 PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
