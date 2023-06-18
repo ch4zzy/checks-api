@@ -14,7 +14,8 @@ services:
     depends_on:
       - db
       - redis
-  
+      - wkhtmltopdf
+
   celery:
     build: .
     command: celery -A config worker -l INFO
@@ -26,7 +27,7 @@ services:
     depends_on:
       - django
       - redis
-  
+
   db:
     image: postgres:14.7
     environment:
@@ -36,8 +37,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
+  wkhtmltopdf:
+    image: openlabs/docker-wkhtmltopdf-aas:latest
+    volumes:
+      - tmp:/tmp
+
   redis:
     image: "redis:alpine"
 
 volumes:
   postgres_data:
+  media:
+  tmp:
