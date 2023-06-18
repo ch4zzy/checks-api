@@ -1,6 +1,7 @@
 import os
 
 import environ
+import pdfkit
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 env = environ.Env()
@@ -123,3 +124,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "/media/")
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+
+
+WKHTMLTOPDF_CMD = "/usr/bin/wkhtmltopdf"
+PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
+WKHTMLTOPDF_API_URL = "http://wkhtmltopdf:80"
