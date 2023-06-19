@@ -4,12 +4,20 @@ The service receives information about a new order, creates checks for all the p
 
 
 ## Endpoints
-```GET /api/check/ - List of all  checks.```
-```GET /api/check/<int:id>/printer_list/ - List of all checks for current printer.```
-```GET /api/checkfile/<int:id>/ - check downloading and marking as printed.```
+```
+GET /api/check/ - List of all  checks.
+```
+```
+GET /api/check/<int:id>/printer_list/ - List of all checks for current printer.
+```
+```
+GET /api/checkfile/<int:id>/ - check downloading and marking as printed.
+```
 
-```POST /api/create/ - Check create.```
-Request example.
+```
+POST /api/create/ - Check create.
+```
+## Request example.
 
 ```json
 {
