@@ -1,3 +1,4 @@
+from django.http import FileResponse
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -7,7 +8,7 @@ from apps.reciept.constants import StatusType
 from apps.reciept.models import Check, Printer
 from apps.reciept.serializers import CheckListSerializer, CheckSerializer
 from apps.reciept.tasks import async_create_pdf
-from apps.reciept.validators import validate_order, validate_printers
+from apps.reciept.validators import validate_order, validate_pdf, validate_printers
 
 
 class CheckListViewSet(viewsets.ModelViewSet):
@@ -55,3 +56,37 @@ class CheckViewSet(viewsets.GenericViewSet):
             created_checks.append(serializer.data)
             async_create_pdf.delay(check.id, printer.check_type, data["order"])
         return Response(created_checks, status=status.HTTP_201_CREATED)
+
+
+class RetrieveUpdateCheckViewSet(viewsets.GenericViewSet):
+    """
+    A view set for retrieving and updating checks, simulating check printing in a real case.
+    """
+
+    queryset = Check.objects.all()
+    serializer_class = CheckSerializer
+
+    def get_object(self):
+        """
+        Retrieve the check object based on the provided ID.
+        """
+
+        check_id = self.kwargs["pk"]
+        return get_object_or_404(Check, id=check_id)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve the PDF file of a printed check and mark its status as printed.
+        """
+
+        check = self.get_object()
+        validate_pdf(check.id)
+
+        file_path = check.pdf_file.path
+        file_name = check.pdf_file.name.split("/")[-1]
+
+        response = FileResponse(open(file_path, "rb"), as_attachment=True)
+        response["Content-Disposition"] = f'attachment; filename="{file_name}"'
+        check.status = StatusType.PRINTED
+        check.save()
+        return response
