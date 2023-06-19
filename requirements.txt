@@ -7,3 +7,4 @@ celery==5.3.0
 redis==4.5.5
 pdfkit==1.0.0
 requests==2.31.0
+PyPDF2==3.0.1
