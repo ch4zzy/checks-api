@@ -21,7 +21,7 @@ __pycache__
 venv/
 
 # local env files
-
+.env
 
 # Editor directories and files
 .idea
@@ -29,3 +29,6 @@ venv/
 *.ntvs*
 *.njsproj
 *.sln
+static/
+pdf/
+tmp/

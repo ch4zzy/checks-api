@@ -1,0 +1,51 @@
+version: '3.10'
+
+services:
+  django:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+      - wkhtmltopdf
+
+  celery:
+    build: .
+    command: celery -A config worker -l INFO
+    volumes:
+      - .:/code
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - django
+      - redis
+
+  db:
+    image: postgres:14.7
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    env_file:
+      - config/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  wkhtmltopdf:
+    image: openlabs/docker-wkhtmltopdf-aas:latest
+    volumes:
+      - tmp:/tmp
+
+  redis:
+    image: "redis:alpine"
+
+volumes:
+  postgres_data:
+  media:
+  tmp:
