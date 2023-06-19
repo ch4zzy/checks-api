@@ -5,7 +5,7 @@ from apps.reciept.models import Check, Printer
 
 @admin.register(Check)
 class CheckAdmin(admin.ModelAdmin):
-    list_display = ("printer", "check_type", "order", "status", "pdf_file")
+    list_display = ("id", "printer", "check_type", "order", "status", "pdf_file")
     list_filter = (
         "check_type",
         "status",
