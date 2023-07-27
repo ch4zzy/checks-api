@@ -8,7 +8,7 @@ def validate_printers(point_id):
     """
     Validate the existence of printers with the specified point_id.
     """
-    
+
     printers = Printer.objects.filter(point_id=point_id)
     if not printers.exists():
         raise ValidationError("Printers with the specified point_id do not exist.")

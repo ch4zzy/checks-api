@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "apps.reciept",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -118,8 +119,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
 
 # Media files (pdf)
 
-MEDIA_URL = os.path.join(BASE_DIR, "/media/")
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 
 # Celery config
@@ -133,3 +134,18 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 WKHTMLTOPDF_CMD = "/usr/bin/wkhtmltopdf"
 PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
 WKHTMLTOPDF_API_URL = "http://wkhtmltopdf:80"
+
+
+# AWS S3 config
+
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_SIGNATURE_NAME = env("AWS_S3_SIGNATURE_NAME")
+AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
+AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE")
+
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+MEDIA_LOCATION = "media"
+MEDIA_URL_AWS = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
+DEFAULT_FILE_STORAGE = "config.storage_backends.MediaStorage"
