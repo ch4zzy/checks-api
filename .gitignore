@@ -30,5 +30,4 @@ venv/
 *.njsproj
 *.sln
 static/
-pdf/
-tmp/
+*.pdf
