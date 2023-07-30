@@ -1,23 +1,23 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 
 from apps.reciept.models import Check, Printer
 
 
-def validate_printers(point_id):
+def validate_printers(point_id: int) -> None:
     """
     Validate the existence of printers with the specified point_id.
     """
-    
+
     printers = Printer.objects.filter(point_id=point_id)
     if not printers.exists():
         raise ValidationError(
-            "Printers with the specified point_id do not exist.", 
-            code=status.HTTP_404_NOT_FOUND
+            "Printers with the specified point_id do not exist.", code=status.HTTP_404_NOT_FOUND
         )
 
 
-def validate_order(order_id):
+def validate_order(order_id: int) -> None:
     """
     Validate the uniqueness of the order_id in checks.
     """
@@ -29,12 +29,12 @@ def validate_order(order_id):
         )
 
 
-def validate_pdf(check_id):
+def validate_pdf(check_id: int) -> None:
     """
     Validate the PDF file of a check.
     """
 
-    check = Check.objects.get(id=check_id)
+    check = get_object_or_404(Check, id=check_id)
     if not check.pdf_file:
         raise ValidationError(
             "The PDF file of the check has not been created yet.",
