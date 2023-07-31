@@ -8,3 +8,5 @@ redis==4.5.5
 pdfkit==1.0.0
 requests==2.31.0
 PyPDF2==3.0.1
+boto3==1.26.161
+django-storages==1.13.2
