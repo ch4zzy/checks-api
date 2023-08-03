@@ -1,47 +1,89 @@
 from django.http import FileResponse
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
+from rest_framework import generics, status
 from rest_framework.response import Response
 
 from apps.reciept.constants import StatusType
 from apps.reciept.models import Check, Printer
-from apps.reciept.serializers import CheckListSerializer, CheckSerializer
+from apps.reciept.serializers import (
+    CheckListSerializer,
+    CheckSerializer,
+    CheckUpdateSerializer,
+)
 from apps.reciept.tasks import async_create_pdf
-from apps.reciept.validators import validate_order, validate_pdf, validate_printers
+from apps.reciept.validators import (
+    validate_check_by_id,
+    validate_order,
+    validate_printers_by_point,
+)
 
 
-class CheckListViewSet(viewsets.ModelViewSet):
+class CheckList(generics.ListAPIView):
+    """
+    List of checks for point_id.
+    """
+
     serializer_class = CheckListSerializer
     queryset = Check.objects.all()
 
-    @action(detail=True, methods=["get"])
-    def printer_list(self, request, pk):
+    def get_queryset(self):
         """
-        List of checks for printer.
+        Get the queryset for the list of checks.
         """
 
-        printer = get_object_or_404(Printer, pk=pk)
-        available_checks = printer.checks.all()
-        serializer = self.get_serializer(available_checks, many=True)
-        return Response(serializer.data)
+        queryset = super().get_queryset()
+        point_id = self.request.query_params.get("point_id", None)
+        validate_printers_by_point(point_id)
+        if point_id is not None:
+            queryset = queryset.filter(printer__point_id=point_id)
+        return queryset
 
 
-class CheckViewSet(viewsets.GenericViewSet):
-    queryset = Check.objects.all()
+class CheckDetail(generics.RetrieveAPIView):
+    """
+    Retrieve a check instance.
+    """
+
     serializer_class = CheckSerializer
+    queryset = Check.objects.all()
+
+    def get_queryset(self):
+        """
+        Get the queryset for retrieving the check instance.
+        """
+
+        pk = self.kwargs.get("pk")
+        validate_check_by_id(pk)
+        queryset = self.queryset.filter(pk=pk)
+        return queryset
+
+
+class CheckCreate(generics.CreateAPIView):
+    """
+    Create a check.
+    """
+
+    serializer_class = CheckSerializer
+    queryset = Check.objects.all()
 
     def create(self, request):
+        """
+        Create a new check instance.
+        """
+
         data = request.data
+
         point_id = data.get("point_id")
         order_id = data.get("order", {}).get("order_id")
 
-        validate_printers(point_id)
+        validate_printers_by_point(point_id)
         validate_order(order_id)
 
         printers = Printer.objects.filter(point_id=point_id)
 
         created_checks = []
+
         for printer in printers:
             data = {
                 "printer": printer.id,
@@ -58,35 +100,51 @@ class CheckViewSet(viewsets.GenericViewSet):
         return Response(created_checks, status=status.HTTP_201_CREATED)
 
 
-class RetrieveUpdateCheckViewSet(viewsets.GenericViewSet):
+class CheckUpdate(generics.UpdateAPIView):
     """
-    A view set for retrieving and updating checks, simulating check printing in a real case.
+    Update the check instance, returns a file and marks the check as printed.
     """
 
+    serializer_class = CheckUpdateSerializer
     queryset = Check.objects.all()
-    serializer_class = CheckSerializer
 
     def get_object(self):
         """
-        Retrieve the check object based on the provided ID.
+        Get the check object based on the provided 'pk'.
         """
 
-        check_id = self.kwargs["pk"]
-        return get_object_or_404(Check, id=check_id)
+        pk = self.kwargs.get("pk")
+        validate_check_by_id(pk)
+        return get_object_or_404(Check, pk=pk)
 
-    def retrieve(self, request, *args, **kwargs):
+    def perform_update(self, serializer):
         """
-        Retrieve the PDF file of a printed check and mark its status as printed.
+        Update the status of the check instance to 'StatusType.PRINTED'.
         """
 
-        check = self.get_object()
-        validate_pdf(check.id)
+        instance = serializer.save(status=StatusType.PRINTED)
 
-        file_path = check.pdf_file.path
-        file_name = check.pdf_file.name.split("/")[-1]
+    def get_pdf_file_response(self, instance):
+        """
+        Get the PDF file response of the check instance.
+        """
 
-        response = FileResponse(open(file_path, "rb"), as_attachment=True)
-        response["Content-Disposition"] = f'attachment; filename="{file_name}"'
-        check.status = StatusType.PRINTED
-        check.save()
-        return response
+        instance = self.get_object()
+        file_path = instance.file_path
+
+        with open(file_path, "rb") as f:
+            response = FileResponse(f.read(), content_type="text/pdf")
+            response["Content-Disposition"] = f"attachment; filename={slugify(instance.name)}"
+
+            return response
+
+    def update(self, request, *args, **kwargs):
+        """
+        Update the check instance and return the PDF file.
+        """
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return self.get_pdf_file_response(instance)
