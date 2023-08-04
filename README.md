@@ -6,7 +6,11 @@ The service receives information about a new order, creates checks for all the p
 ## Endpoints
 ```
 GET /api/check/ - List of all  checks.
+```
+```
 GET /api/check/<int:id>/ - Detail of current check.
+```
+```
 GET /api/check/?point_id=<int:id>/ - List of checks for current point id.
 ```
 
