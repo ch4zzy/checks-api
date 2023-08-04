@@ -6,12 +6,12 @@ The service receives information about a new order, creates checks for all the p
 ## Endpoints
 ```
 GET /api/check/ - List of all  checks.
+GET /api/check/<int:id>/ - Detail of current check.
+GET /api/check/?point_id=<int:id>/ - List of checks for current point id.
 ```
+
 ```
-GET /api/check/<int:id>/printer_list/ - List of all checks for current printer.
-```
-```
-GET /api/checkfile/<int:id>/ - check downloading and marking as printed.
+PUT /api/check/<int:id>/update/ - check downloading and marking as printed.
 ```
 
 ```
