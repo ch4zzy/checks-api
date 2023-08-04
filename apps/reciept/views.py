@@ -1,5 +1,5 @@
 from django.http import FileResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.text import slugify
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -100,9 +100,9 @@ class CheckCreate(generics.CreateAPIView):
         return Response(created_checks, status=status.HTTP_201_CREATED)
 
 
-class CheckUpdate(generics.UpdateAPIView):
+class CheckRetrieveUpdate(generics.RetrieveUpdateAPIView):
     """
-    Update the check instance, returns a file and marks the check as printed.
+    Retrieve or Update the check instance, returns a file and marks the check as printed if updated.
     """
 
     serializer_class = CheckUpdateSerializer
@@ -117,26 +117,34 @@ class CheckUpdate(generics.UpdateAPIView):
         validate_check_by_id(pk)
         return get_object_or_404(Check, pk=pk)
 
-    def perform_update(self, serializer):
-        """
-        Update the status of the check instance to 'StatusType.PRINTED'.
-        """
-
-        instance = serializer.save(status=StatusType.PRINTED)
-
     def get_pdf_file_response(self, instance):
         """
         Get the PDF file response of the check instance.
         """
 
+        file_name = instance.pdf_file.name
+
+        response = FileResponse(instance.pdf_file, content_type="application/pdf")
+        response["Content-Disposition"] = f"attachment; filename={slugify(file_name)}.pdf"
+
+        return response
+
+    def perform_update(self, serializer):
+        """
+        Update the check instance and set the status to 'StatusType.PRINTED'.
+        """
+
+        instance = serializer.save(status=StatusType.PRINTED)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve the check instance and return the PDF file.
+        """
+
         instance = self.get_object()
-        file_path = instance.file_path
+        self.get_serializer(instance)
 
-        with open(file_path, "rb") as f:
-            response = FileResponse(f.read(), content_type="text/pdf")
-            response["Content-Disposition"] = f"attachment; filename={slugify(instance.name)}"
-
-            return response
+        return self.get_pdf_file_response(instance)
 
     def update(self, request, *args, **kwargs):
         """
@@ -144,7 +152,9 @@ class CheckUpdate(generics.UpdateAPIView):
         """
 
         instance = self.get_object()
+
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        return self.get_pdf_file_response(instance)
+
+        return redirect("reciept:check-update-retrieve", pk=instance.id)
