@@ -19,7 +19,6 @@ def create_pdf(id, check_type, order_detail):
 
     check = Check.objects.get(id=id)
     order_id = order_detail["order_id"]
-    # os.path.join(BASE_DIR, "media/pdf")
 
     # Generate the HTML template for the check
     check_template = render_to_string(
