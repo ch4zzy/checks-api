@@ -106,8 +106,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 
@@ -148,4 +146,4 @@ AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE")
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 MEDIA_LOCATION = "media"
 MEDIA_URL_AWS = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
-DEFAULT_FILE_STORAGE = "config.storage_backends.MediaStorage"
+STORAGES = "config.storage_backends.MediaStorage"
