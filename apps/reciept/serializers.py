@@ -34,6 +34,19 @@ class CheckListSerializer(serializers.ModelSerializer):
         )
 
 
+class CheckUpdateSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Check model. Update view.
+    """
+
+    class Meta:
+        model = Check
+        fields = (
+            "id",
+            "status",
+        )
+
+
 class PrinterSerializer(serializers.ModelSerializer):
     """
     Serializer for the Printer model.
