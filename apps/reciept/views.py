@@ -34,8 +34,9 @@ class CheckList(generics.ListAPIView):
 
         queryset = super().get_queryset()
         point_id = self.request.query_params.get("point_id", None)
-        validate_printers_by_point(point_id)
+        
         if point_id is not None:
+            validate_printers_by_point(point_id)
             queryset = queryset.filter(printer__point_id=point_id)
         return queryset
 
