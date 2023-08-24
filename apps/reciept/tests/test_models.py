@@ -1,55 +1,30 @@
 import pytest
 from django.db.utils import IntegrityError
 from apps.reciept.models import Printer, Check
-from apps.reciept.constants import RecieptType, StatusType
 
 
 @pytest.mark.django_db
-def test_printer_creation():
-    printer = Printer.objects.create(
-        name="Test Printer",
-        api_key="test_api_key",
-        check_type=RecieptType.KITCHEN,
-        point_id=1
-    )
-    assert printer.name == "Test Printer"
-    assert printer.api_key == "test_api_key"
-    assert printer.check_type == RecieptType.KITCHEN
-    assert printer.point_id == 1
+def test_printer_creation(printer_create, printer_data):
+    assert Printer.objects.count() == 1
+    printer = printer_create
+    assert printer.name == printer_data["name"]
+    assert printer.api_key == printer_data["api_key"]
+    assert printer.check_type == printer_data["check_type"]
+    assert printer.point_id == printer_data["point_id"]
 
 
 @pytest.mark.django_db
-def test_unique_api_key():
+def test_unique_api_key(printer_create, printer_data_same_api_key):
     with pytest.raises(IntegrityError):
-        Printer.objects.create(
-            name="Printer 1",
-            api_key="duplicate_key",
-            check_type=RecieptType.KITCHEN,
-            point_id=1
-        )
-        Printer.objects.create(
-            name="Printer 2",
-            api_key="duplicate_key",
-            check_type=RecieptType.CLIENT,
-            point_id=2
-        )
+        Printer.objects.create(**printer_data_same_api_key)
 
 
 @pytest.mark.django_db
-def test_check_creation():
-    printer = Printer.objects.create(
-        name="Test Printer",
-        api_key="test_api_key",
-        check_type=RecieptType.KITCHEN,
-        point_id=1
-    )
-    check = Check.objects.create(
-        printer=printer,
-        check_type=RecieptType.KITCHEN,
-        order={"item": "Test Item"},
-        status=StatusType.NEW
-    )
-    assert check.printer == printer
-    assert check.check_type == RecieptType.KITCHEN
-    assert check.order == {"item": "Test Item"}
-    assert check.status == StatusType.NEW
+def test_check_creation(check_data, check_create):
+    assert Check.objects.count() == 1
+    assert Printer.objects.count() == 1
+    check = check_create
+    assert check.printer == check_data["printer"]
+    assert check.check_type == check_data["check_type"]
+    assert check.order == check_data["order"]
+    assert check.status == check_data["status"]
