@@ -33,13 +33,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "apps.reciept",
     "storages",
-    "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -148,4 +146,4 @@ AWS_S3_FILE_OVERWRITE = env.bool("AWS_S3_FILE_OVERWRITE")
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 MEDIA_LOCATION = "media"
 MEDIA_URL_AWS = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
-STORAGES = "config.storage_backends.MediaStorage"
+DEFAULT_FILE_STORAGE = "config.storage_backends.MediaStorage"
