@@ -1,6 +1,9 @@
 import pytest
 from apps.reciept.models import Printer, Check
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
+from moto import mock_s3
+import boto3
 
 
 @pytest.fixture
@@ -69,3 +72,16 @@ def printer_create(printer_data):
 @pytest.fixture
 def check_create(check_data, printer_create):
     return Check.objects.create(**check_data)
+
+
+@pytest.fixture
+def mock_s3_bucket():
+    with mock_s3():
+        s3 = boto3.client(
+            "s3",
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+           # region_name=settings.AWS_S3_REGION_NAME,
+        )
+        s3.create_bucket(Bucket=settings.AWS_STORAGE_BUCKET_NAME)
+        yield s3
