@@ -41,7 +41,12 @@ def create_pdf(id, check_type, order_detail):
     )
 
     s3_file_key = f"media/{order_id}_{check_type}.pdf"
-    s3.upload_fileobj(ContentFile(pdf_data), settings.AWS_STORAGE_BUCKET_NAME, s3_file_key)
+    s3.upload_fileobj(
+        ContentFile(pdf_data),
+        settings.AWS_STORAGE_BUCKET_NAME,
+        s3_file_key,
+        ExtraArgs={"ContentType": "application/pdf"},
+    )
 
     pdf_url = f"{order_id}_{check_type}.pdf"
     check.pdf_file = pdf_url
