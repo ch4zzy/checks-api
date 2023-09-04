@@ -32,12 +32,6 @@ services:
     image: postgres:14.7
     env_file:
       - config/.env
-    # environment:
-      # - POSTGRES_DB=${POSTGRES_DB}
-      # - POSTGRES_USER=${POSTGRES_USER}
-      # - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      # - DB_HOST=${DB_HOST}
-      # - DB_PORT=${DB_PORT}
 
     volumes:
       - postgres_data:/var/lib/postgresql/data/
