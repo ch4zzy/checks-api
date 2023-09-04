@@ -16,7 +16,7 @@ jobs:
       matrix:
         python-version: [3.11]
 
-    env: 
+    .env: 
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DEBUG: ${{ secrets.DEBUG }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
