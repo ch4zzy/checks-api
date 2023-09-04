@@ -45,7 +45,7 @@ class TestCheckViews:
         assert response.status_code == status.HTTP_200_OK
 
         response = client.put(url, content_type="application/json")
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == status.HTTP_302_OK
         check.refresh_from_db()
     
         assert check.status == StatusType.PRINTED
