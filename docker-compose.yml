@@ -32,6 +32,7 @@ services:
     image: postgres:14.7
     env_file:
       - config/.env
+
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
