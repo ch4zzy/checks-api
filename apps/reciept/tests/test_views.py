@@ -16,29 +16,29 @@ class TestCheckViews:
         response = client.get(url)
         assert response.status_code == 200
 
-    def test_check_detail_view(self, client, check_create):
+    def test_check_detail_view(self, client, check):
         """
         Test check detail view.
         """
-        check = check_create
+        check = check
         url = reverse("api_reciept:check-detail", kwargs={"pk": check.pk})
         response = client.get(url)
         assert response.status_code == 200
 
-    def test_check_create_view(self, client, printer_create, check_order_data):
+    def test_check_view(self, client, printer, check_order_data):
         """
         Test check create view.
         """
-        printer = printer_create
+        printer = printer
         url = reverse("api_reciept:check-create")
         response = client.post(url, data=check_order_data, content_type="application/json", format="json")
         assert response.status_code == 201
 
-    def test_check_retrieve_update_view(self, client, printer_create, check_data_pdf):
+    def test_check_retrieve_update_view(self, client, printer, check_data_pdf):
         """
         Test check retrieve and update view.
         """
-        printer = printer_create
+        printer = printer
         check = Check.objects.create(**check_data_pdf)
         url = reverse("api_reciept:check-update-retrieve", kwargs={"pk": check.pk})
 
