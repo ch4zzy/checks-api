@@ -16,7 +16,6 @@ def create_pdf(id, check_type, order_detail):
     """
     Create a PDF file for a check and save it to the media/pdf directory.
     """
-
     check = Check.objects.get(id=id)
     order_id = order_detail["order_id"]
 

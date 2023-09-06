@@ -31,7 +31,6 @@ class CheckList(generics.ListAPIView):
         """
         Get the queryset for the list of checks.
         """
-
         queryset = super().get_queryset()
         point_id = self.request.query_params.get("point_id", None)
 
@@ -53,7 +52,6 @@ class CheckDetail(generics.RetrieveAPIView):
         """
         Get the queryset for retrieving the check instance.
         """
-
         pk = self.kwargs.get("pk")
         validate_check_by_id(pk)
         queryset = self.queryset.filter(pk=pk)
@@ -72,7 +70,6 @@ class CheckCreate(generics.CreateAPIView):
         """
         Create a new check instance.
         """
-
         data = request.data
 
         point_id = data.get("point_id")
@@ -113,7 +110,6 @@ class CheckRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """
         Get the check object based on the provided 'pk'.
         """
-
         pk = self.kwargs.get("pk")
         validate_check_by_id(pk)
         return get_object_or_404(Check, pk=pk)
@@ -122,7 +118,6 @@ class CheckRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """
         Get the PDF file response of the check instance.
         """
-
         file_name = instance.pdf_file.name
 
         response = FileResponse(instance.pdf_file, content_type="application/pdf")
@@ -134,14 +129,12 @@ class CheckRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """
         Update the check instance and set the status to 'StatusType.PRINTED'.
         """
-
         instance = serializer.save(status=StatusType.PRINTED)
 
     def retrieve(self, request, *args, **kwargs):
         """
         Retrieve the check instance and return the PDF file.
         """
-
         instance = self.get_object()
         self.get_serializer(instance)
 
@@ -151,7 +144,6 @@ class CheckRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """
         Update the check instance and return the PDF file.
         """
-
         instance = self.get_object()
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
