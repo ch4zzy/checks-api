@@ -10,8 +10,8 @@ from apps.reciept.utils import create_pdf
 
 
 @pytest.mark.django_db
-def test_create_pdf(mock_s3_bucket, check_order_data, check_create):
-    check = check_create
+def test_create_pdf(mock_s3_bucket, check_order_data, check):
+    check = check
     check.order = check_order_data["order"]
     check.save()
     check.refresh_from_db()
