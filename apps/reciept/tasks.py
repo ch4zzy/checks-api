@@ -1,4 +1,4 @@
-from apps.reciept.utils import create_pdf
+from .utils import create_pdf
 from config.celery import app
 
 

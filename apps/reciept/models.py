@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.reciept.constants import RecieptType, StatusType
+from .constants import RecieptType, StatusType
 
 
 class Printer(models.Model):

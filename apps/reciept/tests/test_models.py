@@ -1,6 +1,6 @@
 import pytest
 from django.db.utils import IntegrityError
-from apps.reciept.models import Printer, Check
+from reciept.models import Printer, Check
 
 
 @pytest.mark.django_db

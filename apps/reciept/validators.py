@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 
-from apps.reciept.models import Check, Printer
+from .models import Check, Printer
 
 
 def validate_printers_by_point(point_id: int) -> None:
