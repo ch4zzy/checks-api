@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.reciept.views import CheckCreate, CheckDetail, CheckList, CheckRetrieveUpdate
+from .views import CheckCreate, CheckDetail, CheckList, CheckRetrieveUpdate
 
 app_name = "reciept"
 

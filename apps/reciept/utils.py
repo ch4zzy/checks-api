@@ -7,8 +7,8 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
 
-from apps.reciept.constants import StatusType
-from apps.reciept.models import Check
+from .constants import StatusType
+from .models import Check
 from config.settings import BASE_DIR, PDFKIT_CONFIG
 
 
