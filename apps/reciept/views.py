@@ -4,15 +4,15 @@ from django.utils.text import slugify
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from apps.reciept.constants import StatusType
-from apps.reciept.models import Check, Printer
-from apps.reciept.serializers import (
+from .constants import StatusType
+from .models import Check, Printer
+from .serializers import (
     CheckListSerializer,
     CheckSerializer,
     CheckUpdateSerializer,
 )
-from apps.reciept.tasks import async_create_pdf
-from apps.reciept.validators import (
+from .tasks import async_create_pdf
+from .validators import (
     validate_check_by_id,
     validate_order,
     validate_printers_by_point,

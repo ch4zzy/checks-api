@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.reciept.models import Check, Printer
+from .models import Check, Printer
 
 
 @admin.register(Check)

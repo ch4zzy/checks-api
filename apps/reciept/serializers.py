@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.reciept.models import Check, Printer
+from .models import Check, Printer
 
 
 class CheckSerializer(serializers.ModelSerializer):

@@ -3,9 +3,9 @@ import json
 import pytest
 from django.conf import settings
 from moto import mock_s3
-from apps.reciept.models import Check
-from apps.reciept.constants import StatusType
-from apps.reciept.utils import create_pdf
+from ..models import Check
+from ..constants import StatusType
+from ..utils import create_pdf
 
 
 
