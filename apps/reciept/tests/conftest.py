@@ -1,5 +1,5 @@
 import pytest
-from reciept.models import Printer, Check
+from ..models import Printer, Check
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 from moto import mock_s3

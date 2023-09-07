@@ -1,8 +1,8 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from reciept.models import Printer, Check
-from reciept.constants import RecieptType, StatusType
+from ..models import Printer, Check
+from ..constants import RecieptType, StatusType
 
 
 @pytest.mark.django_db
