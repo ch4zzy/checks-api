@@ -6,17 +6,9 @@ from rest_framework.response import Response
 
 from .constants import StatusType
 from .models import Check, Printer
-from .serializers import (
-    CheckListSerializer,
-    CheckSerializer,
-    CheckUpdateSerializer,
-)
+from .serializers import CheckListSerializer, CheckSerializer, CheckUpdateSerializer
 from .tasks import async_create_pdf
-from .validators import (
-    validate_check_by_id,
-    validate_order,
-    validate_printers_by_point,
-)
+from .validators import validate_check_by_id, validate_order, validate_printers_by_point
 
 
 class CheckList(generics.ListAPIView):

@@ -1,5 +1,6 @@
-from .utils import create_pdf
 from config.celery import app
+
+from .utils import create_pdf
 
 
 @app.task
