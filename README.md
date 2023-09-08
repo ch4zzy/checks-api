@@ -40,4 +40,3 @@ POST /api/create/ - Check create.
 ## Testing
 
 Tested using pytest and pytest-django.
-
