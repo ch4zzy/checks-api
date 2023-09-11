@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "apps.reciept",
     "storages",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
