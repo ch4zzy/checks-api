@@ -149,3 +149,23 @@ AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 MEDIA_LOCATION = "media"
 MEDIA_URL_AWS = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
 DEFAULT_FILE_STORAGE = "config.storage_backends.MediaStorage"
+
+
+# Logging config
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        }
+    }
+}
+
+# Logging config end
