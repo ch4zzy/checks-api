@@ -22,7 +22,6 @@ def create_pdf(id, check_type, order_detail):
     order_id = order_detail["order_id"]
     global_preferences = global_preferences_registry.manager()
     company_name = global_preferences["company__company_name"]
-    print(company_name)
     file_name = f"{company_name}_{order_id}_{check_type}"
 
     # Generate the HTML template for the check
