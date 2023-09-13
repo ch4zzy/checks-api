@@ -121,7 +121,7 @@ class CheckRetrieveUpdate(generics.RetrieveUpdateAPIView):
         """
         Update the check instance and set the status to 'StatusType.PRINTED'.
         """
-        instance = serializer.save(status=StatusType.PRINTED)
+        serializer.save(status=StatusType.PRINTED)
 
     def retrieve(self, request, *args, **kwargs):
         """
