@@ -1,6 +1,7 @@
 # Checks API
 
 ![action status](https://github.com/ch4zzy/checks-api/actions/workflows/django.yml/badge.svg)
+![action status](https://github.com/ch4zzy/checks-api/actions/workflows/pre-commit.yml/badge.svg)
 
 The service receives information about a new order, creates checks for all the printers of the specified location in the database, and initiates asynchronous tasks for generating PDF files for these checks. If the location does not have any printers, an error is returned. If checks for this order have already been created, an error is returned along with the order number.
 
