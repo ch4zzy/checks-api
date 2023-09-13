@@ -1,0 +1,25 @@
+name: Pre-Commit Check
+
+on:
+  pull_request:
+    branches: ["main", "develop"]
+
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install Pre-Commit
+        run: pip install pre-commit
+
+      - name: Run Pre-Commit
+        run: pre-commit run -a
