@@ -3,7 +3,7 @@ name: Pre-Commit Check
 on:
   pull_request:
     branches: ["main", "develop"]
-      
+
 
 jobs:
   pre-commit:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.11 
+          python-version: 3.11
 
       - name: Install Pre-Commit
         run: pip install pre-commit
