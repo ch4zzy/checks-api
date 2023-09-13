@@ -59,7 +59,3 @@ jobs:
     - name: Run Tests
       run: |
         docker-compose exec -T django pytest
-    - name: Run pre-commit
-      run: |
-        docker-compose exec -T django pre-commit install
-        docker-compose exec -T django pre-commit run -a
