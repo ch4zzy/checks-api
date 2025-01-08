@@ -37,7 +37,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
 
   wkhtmltopdf:
-    image: openlabs/docker-wkhtmltopdf-aas:latest
+    image: surnet/alpine-wkhtmltopdf:3.20.3-0.12.6-full
     volumes:
       - tmp:/tmp
 

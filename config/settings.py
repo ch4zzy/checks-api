@@ -152,20 +152,3 @@ DEFAULT_FILE_STORAGE = "config.storage_backends.MediaStorage"
 
 
 # Logging config
-
-LOGGING = {
-    "version": 1,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        }
-    },
-    "loggers": {
-        "django.db.backends": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-        }
-    },
-}
-
-# Logging config end
